@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>Reutiliza</b>GT',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -303,6 +303,18 @@ return [
         'text' => 'Dashboard',
         'url'  => 'dashboard',
         'icon' => 'fas fa-home',
+        'can' => 'admin', 'moderador',
+    ],
+    [
+        'text' => 'Publicaciones',
+        'url'  => 'dashboard',
+        'icon' => 'fas fa-home',
+        'can' => 'publico',
+    ],
+    [
+        'text' => 'Perfil',
+        'url' => 'user/profile',
+        'icon' => 'fas fa-fw fa-user',
     ],
     [
         'text' => 'Usuarios',
@@ -317,6 +329,7 @@ return [
         'can'  => 'moderador',
     ],
     [
+        'key'  => 'mis-productos',
         'text' => 'Mis Productos',
         'url'  => 'publico/mis-productos',
         'icon' => 'fas fa-box',
