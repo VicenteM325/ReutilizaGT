@@ -1,23 +1,46 @@
+# Laravel Vendor and dependencies
+/vendor/
+node_modules/
+
+# Logs and debug
+npm-debug.log
+yarn-error.log
+
+# Laravel specific files and folders
 /.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
+.phpunit.result.cache
+
+# Storage folders
 /storage/*.key
 /storage/pail
-/vendor
+
+# Public storage and hot reload
+/public/storage
+/public/hot
+/public/build
+
+# Homestead and Vagrant files
+Homestead.yaml
+Homestead.json
+/.vagrant
+
+# Env files
 .env
 .env.backup
 .env.production
-.phpactor.json
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
-/auth.json
+
+# IDEs and tools
 /.fleet
 /.idea
 /.nova
 /.vscode
 /.zed
+
+# Other config and auth files
+.phpactor.json
+/auth.json
+auth.json
+/bootstrap/compiled.php
+/app/storage/
+/public_html/storage
+/public_html/hot
