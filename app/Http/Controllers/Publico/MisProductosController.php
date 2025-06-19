@@ -126,10 +126,39 @@ class MisProductosController extends Controller
             abort(403);
         }
 
+        if ($producto->estado !== 'aprobado') {
+        return redirect()->route('mis-productos.index')->with('error', 'Solo puedes marcar productos aprobados como entregados.');
+        }
+
+        $tieneSolicitudAceptada = $producto->solicitudes()
+        ->where('estado', 'aceptado')
+        ->exists();
+
+        if (!$tieneSolicitudAceptada) {
+         return redirect()->route('mis-productos.index')->with('error', 'Este producto debe tener una solicitud aceptada para poder marcarlo como entregado.');
+        }
+
         $producto->entregado = true;
         $producto->save();
 
         return redirect()->route('mis-productos.index')->with('success', 'Producto marcado como entregado.');
+    }
+
+    public function confirmarRecepcion(Producto $producto)
+    {
+        $solicitud = $producto->solicitudes()
+            ->where('solicitante_id', Auth::id())
+            ->where('estado', 'aceptado')
+            ->first();
+
+        if (!$solicitud || !$producto->entregado) {
+            abort(403);
+        }
+
+        $producto->confirmado_por_receptor = true;
+        $producto->save();
+
+        return redirect()->route('publicaciones.index')->with('success', 'Has confirmado la recepción del producto.');
     }
 
 }

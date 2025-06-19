@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('publico', fn($user) => $user->hasRole('publico'));
 
         $this->app['events']->listen(BuildingMenu::class, function (BuildingMenu $event) {
+            
         // Solo para usuarios autenticados con rol 'publico'
         if (Auth::check() && Auth::user()->hasRole('publico')) {
             $pendientes = SolicitudReutilizacion::whereHas('producto', function ($q) {

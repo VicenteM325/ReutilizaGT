@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SolicitudReutilizacion;
 
 
 class Producto extends Model
@@ -20,9 +21,19 @@ class Producto extends Model
         'user_id',
     ];
 
+    protected $casts =[
+        'entregado' => 'boolean',
+        'confirmado_por_receptor',
+    ];
+
     public function categoria()
     {
         return $this->belongsTo(Categoria::class);
+    }
+
+    public function solicitudes()
+    {
+        return $this->hasMany(SolicitudReutilizacion::class);
     }
 
     public function conversaciones()
@@ -42,7 +53,8 @@ class Producto extends Model
 
     public function scopeAprobados($query)
     {
-    return $query->where('estado', 'aprobado');
+    return $query->where('estado', 'aprobado')
+                 ->where('finalizado', false);
     }
 
     public function scopePorCategoria($query, $categoriaId)

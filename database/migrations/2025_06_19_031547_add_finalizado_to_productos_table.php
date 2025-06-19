@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('productos', function (Blueprint $table) {
-            $table->boolean('confirmado_por_receptor')->default(false);
+        $table->boolean('finalizado')->default(false)->after('confirmado_por_receptor');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('productos', function (Blueprint $table) {
-            //
+        $table->dropColumn('finalizado');
         });
     }
 };

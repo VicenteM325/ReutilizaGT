@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 
 class UsuariosController extends Controller
 {
@@ -17,18 +18,26 @@ class UsuariosController extends Controller
     }
 
     public function create()
-    {
+    {   
+        $roles = auth()->user()->hasRole('moderador') 
+            ? Role::where('name', '!=', 'admin')->get() 
+            : Role::all();
+
         $roles = Role::all();
         return view('admin.usuarios.create', compact('roles'));
     }
 
     public function store(Request $request)
     {
+        $rolesPermitidos = auth()->user()->hasRole('moderador') 
+            ? Role::where('name', '!=', 'admin')->pluck('name')->toArray()
+            : Role::pluck('name')->toArray();
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'roles' => 'required|array',
+            'role' => 'required|string|in:' . implode(',', $rolesPermitidos),
         ]);
 
         $user = User::create([
@@ -44,17 +53,27 @@ class UsuariosController extends Controller
 
     public function edit(User $usuario)
     {
-        $roles = Role::all();
+        if ($usuario->hasRole('admin') && !auth()->user()->hasRole('admin')) {
+            abort(403, 'No tienes permiso para editar un administrador.');
+        }
+        
+        $roles = auth()->user()->hasRole('moderador')
+            ? Role::where('name', '!=', 'admin')->get()
+            : Role::all();
+
         return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
     public function update(Request $request, User $usuario)
     {
+        if ($usuario->hasRole('admin') && !auth()->user()->hasRole('admin')) {
+            abort(403, 'No tienes permiso para actualizar un administrador.');
+        }
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => "required|email|unique:users,email,{$usuario->id}",
             'password' => 'nullable|string|min:8|confirmed',
-            'roles' => 'required|array',
+            'role' => 'required|string',
         ]);
 
         $usuario->name = $request->name;
@@ -64,13 +83,16 @@ class UsuariosController extends Controller
         }
         $usuario->save();
 
-        $usuario->syncRoles($request->roles);
+        $usuario->syncRoles($request->role);
 
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado exitosamente.');
     }
 
     public function destroy(User $usuario)
     {
+        if ($usuario->hasRole('admin') && !auth()->user()->hasRole('admin')) {
+            abort(403, 'No tienes permiso para eliminar un administrador.');
+        }   
         $usuario->delete();
         return redirect()->route('admin.usuarios.index')->with('success', 'Usuario eliminado.');
     }

@@ -9,6 +9,8 @@ use App\Http\Controllers\PublicacionesController;
 use App\Http\Controllers\ReutilizarController;
 use App\Http\Controllers\Publico\SolicitudesRecibidasController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Publico\MisSolicitudesController;
+use App\Http\Controllers\Moderador\ModeradorDashboardController;
 
 
 Route::get('/', function () {
@@ -39,7 +41,7 @@ Route::get('/dashboard', function () {
     abort(403); 
 })->name('dashboard');
 
-    //Administrar roles de usuarios admin y moderador
+    //Administrar roles de usuarios admin
     Route::middleware(['role:admin|moderador'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', function() {
         return view('admin.dashboard');
@@ -55,6 +57,11 @@ Route::get('/dashboard', function () {
     Route::put('productos/{producto}/rechazar', [RevisarProductosController::class, 'rechazar'])->name('productos.rechazar');
     });
 
+    //Dashboard Moderador
+    Route::middleware(['auth', 'role:moderador'])->prefix('moderador')->name('moderador.')->group(function () {
+    Route::get('/dashboard', [ModeradorDashboardController::class, 'index'])->name('dashboard');
+    });
+
     //Usuario Publico
     Route::middleware(['role:publico'])->prefix('publico')->group(function () {
         Route::get('/dashboard', function () {
@@ -63,9 +70,13 @@ Route::get('/dashboard', function () {
     Route::resource('/mis-productos', MisProductosController::class)->names('mis-productos');
     Route::put('/mis-productos/{producto}/entregar', [MisProductosController::class, 'marcarComoEntregado'])->name('mis-productos.entregar');
     });
+    //Solicitudes enviadas
+    Route::middleware(['auth', 'role:publico'])->prefix('publico')->group(function () {
+    Route::get('/mis-solicitudes', [MisSolicitudesController::class, 'index'])->name('mis-solicitudes.index');
+    Route::put('/mis-solicitudes/{producto}/confirmar', [MisSolicitudesController::class, 'confirmar'])->name('mis-solicitudes.confirmar');
+    });
 
-    Route::middleware(['auth', 'role:publico'])->put('/productos/{producto}/recibir', [ReutilizarController::class, 'confirmarRecepcion'])->name('productos.recibir');
-    //Solicitudes
+    //Solicitudes Recibidas
     Route::middleware(['role:publico'])->prefix('publico')->group(function () {
     Route::get('/solicitudes', [SolicitudesRecibidasController::class, 'index'])->name('publico.solicitudes');
     });
@@ -73,6 +84,7 @@ Route::get('/dashboard', function () {
     //Publicaciones
     Route::get('/publicaciones', [PublicacionesController::class, 'index'])->name('publicaciones.index');
     Route::get('/publicaciones/{producto}', [PublicacionesController::class, 'show'])->name('publicaciones.show');
+    
     //Reutilizar
     Route::middleware(['auth'])->post('/productos/{producto}/reutilizar', [ReutilizarController::class, 'solicitar'])->name('productos.reutilizar');
     
@@ -82,32 +94,12 @@ Route::get('/dashboard', function () {
     Route::put('solicitudes/{id}/aceptar', [SolicitudesRecibidasController::class, 'aceptar'])->name('solicitudes.aceptar');
     Route::put('solicitudes/{id}/rechazar', [SolicitudesRecibidasController::class, 'rechazar'])->name('solicitudes.rechazar');
     });
-    /*
-    Route::middleware(['auth'])->group(function () {
-    Route::get('chat/{producto}', [ChatController::class, 'show'])->name('chat.show');
-    Route::post('chat/{producto}', [ChatController::class, 'enviar'])->name('chat.enviar');
-    });
-    Route::middleware(['auth', 'role:publico'])->prefix('publico')->group(function () {
-    Route::get('chat', [ChatController::class, 'index'])->name('chat.index');
-    });
-    //Rutas para ver los mensajes
-    Route::middleware(['auth'])->group(function () {
-    Route::get('conversaciones/{id}', [ChatController::class, 'mostrar'])->name('chat.mostrar');
-    Route::post('conversaciones/{id}/mensaje', [ChatController::class, 'enviar'])->name('chat.enviar');
-    });
-    //Ruta para listar conversaciones
-    Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/chat', [ChatController::class, 'listarConversaciones'])->name('chat.index');
-    Route::get('/chat/{id}', [ChatController::class, 'mostrar'])->name('chat.mostrar');
-    Route::post('/chat/{id}', [ChatController::class, 'enviar'])->name('chat.enviar');
-    });
-    */
 
     //RUTA para mostrar conversación por ID (chat entre 2 usuarios)
-Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
     Route::get('/conversaciones/{id}', [ChatController::class, 'mostrar'])->name('chat.mostrar');
     Route::post('/conversaciones/{id}/mensaje', [ChatController::class, 'enviar'])->name('chat.enviar');
-});
+    });
 
-//RUTA para listar conversaciones del usuario logueado
-Route::middleware(['auth', 'verified'])->get('/chat', [ChatController::class, 'listarConversaciones'])->name('chat.index');
+    //RUTA para listar conversaciones del usuario logueado
+    Route::middleware(['auth', 'verified'])->get('/chat', [ChatController::class, 'listarConversaciones'])->name('chat.index');

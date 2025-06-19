@@ -303,8 +303,16 @@ return [
         'text' => 'Dashboard',
         'url'  => 'dashboard',
         'icon' => 'fas fa-home',
-        'can' => 'admin', 'moderador',
+        'can' => 'admin',
     ],
+
+    [
+        'text' => 'Dashboard',
+        'url'  => 'dashboard',
+        'icon' => 'fas fa-home',
+        'can' => 'moderador',
+    ],
+
     [
         'text' => 'Publicaciones',
         'url'  => 'dashboard',
@@ -339,6 +347,13 @@ return [
     [
         'text' => 'Mi Chat',
         'url'  => 'chat',
+        'icon' => 'fas fa-box',
+        'can'  => 'publico',
+    ],
+
+    [
+        'text' => 'Mis Solicitudes',
+        'url'  => 'publico/mis-solicitudes',
         'icon' => 'fas fa-box',
         'can'  => 'publico',
     ],

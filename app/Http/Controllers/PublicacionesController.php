@@ -24,8 +24,8 @@ class PublicacionesController extends Controller
      public function show(Producto $producto)
     {
         // Solo mostrar productos aprobados
-        abort_unless($producto->estado === 'aprobado', 404);
-
+        abort_unless($producto->estado === 'aprobado' && !$producto->finalizado, 404);
+        $producto->increment('vistas');
         return view('publicaciones.show', compact('producto'));
     }
 }
