@@ -20,8 +20,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <!-- Filtros modernizados -->
-    <!-- Bloque de filtros rediseñado -->
+    <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white py-3 px-4 d-flex flex-wrap justify-content-between align-items-center">
             <h5 class="mb-0 text-primary d-flex align-items-center">
@@ -69,8 +68,20 @@
             </form>
         </div>
     </div>
+    @if($contribuidorDelMes && $contribuidorDelMes->user)
+        <div class="alert alert-info d-flex align-items-center shadow-sm mb-4" style="border-radius: 10px;">
+            <i class="fas fa-trophy fa-2x text-warning me-3"></i>
+            <div>
+                <h5 class="mb-1">🎉 Contribuidor del Mes</h5>
+                <p class="mb-0">
+                    <strong>{{ $contribuidorDelMes->user->name }}</strong> ha contribuido con <strong>{{ $contribuidorDelMes->total }}</strong> publicaciones este mes.
+                </p>
+            </div>
+        </div>
+    @endif
 
-    <!-- Alertas modernas -->
+
+    <!-- Alertas -->
     @if ($errors->any())
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <ul class="mb-0">
@@ -96,7 +107,7 @@
     </div>
     @endif
 
-    <!-- Grid de publicaciones moderno -->
+    <!-- Grid de publicaciones  -->
     @if($productos->isEmpty())
         <div class="text-center py-5">
             <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
@@ -159,7 +170,7 @@
             @endforeach
         </div>
         
-        <!-- Paginación mejorada -->
+        <!-- Paginación  -->
         <div class="d-flex justify-content-center mt-4">
             {{ $productos->links() }}
         </div>

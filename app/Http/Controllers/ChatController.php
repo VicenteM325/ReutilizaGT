@@ -25,6 +25,11 @@ class ChatController extends Controller
         if (!in_array(Auth::id(), [$conversacion->user1_id, $conversacion->user2_id])) {
             abort(403);
         }
+        
+         $conversacion->mensajes()
+        ->where('para_id', Auth::id())
+        ->where('leido', false)
+        ->update(['leido' => true]);
 
         return view('chat.mostrar', compact('conversacion'));
     }

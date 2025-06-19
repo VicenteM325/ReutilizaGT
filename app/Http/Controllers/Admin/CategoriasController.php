@@ -23,7 +23,7 @@ class CategoriasController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
+            'descripcion' => 'required|string|max:255',
         ]);
 
         Categoria::create($request->only('nombre', 'descripcion'));
@@ -40,7 +40,7 @@ class CategoriasController extends Controller
     {
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
+            'descripcion' => 'required|string|max:255',
         ]);
 
         $categoria->update($request->only('nombre', 'descripcion'));

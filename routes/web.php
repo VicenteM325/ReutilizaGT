@@ -11,6 +11,7 @@ use App\Http\Controllers\Publico\SolicitudesRecibidasController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Publico\MisSolicitudesController;
 use App\Http\Controllers\Moderador\ModeradorDashboardController;
+use App\Http\Controllers\Admin\CategoriasController;
 
 
 Route::get('/', function () {
@@ -48,6 +49,7 @@ Route::get('/dashboard', function () {
     })->name('dashboard');
 
     Route::resource('usuarios', UsuariosController::class);
+    Route::resource('categorias', CategoriasController::class);
     });
 
     //Aprobacion de publicaciones

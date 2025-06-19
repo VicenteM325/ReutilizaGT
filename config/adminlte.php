@@ -338,23 +338,16 @@ return [
     ],
     [
         'key'  => 'mis-productos',
-        'text' => 'Mis Productos',
+        'text' => 'Mis Publicaciones',
         'url'  => 'publico/mis-productos',
-        'icon' => 'fas fa-box',
-        'can'  => 'publico',
-    ],
-
-    [
-        'text' => 'Mi Chat',
-        'url'  => 'chat',
-        'icon' => 'fas fa-box',
+        'icon' => 'fas fa-gift',
         'can'  => 'publico',
     ],
 
     [
         'text' => 'Mis Solicitudes',
         'url'  => 'publico/mis-solicitudes',
-        'icon' => 'fas fa-box',
+        'icon' => 'fas fa-paper-plane',
         'can'  => 'publico',
     ],
 

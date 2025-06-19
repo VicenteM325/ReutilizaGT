@@ -55,5 +55,9 @@
     </tbody>
 </table>
 
-{{ $productos->links() }}
+<div class="row">
+    <div class="col-12 d-flex justify-content-center">
+        {{ $productos->links() }}
+    </div>
+</div>
 @stop

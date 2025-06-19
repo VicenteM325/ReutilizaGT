@@ -47,7 +47,7 @@
             <div class="icon">
                 <i class="fas fa-tags"></i>
             </div>
-            <a href="#" class="small-box-footer">
+            <a href="{{ route('admin.categorias.index') }}" class="small-box-footer">
                 Ver categorías <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
