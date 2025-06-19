@@ -14,6 +14,7 @@ class Producto extends Model
         'titulo',
         'descripcion',
         'imagen',
+        'ubicacion',
         'categoria_id',
         'estado',
         'user_id',
@@ -22,6 +23,11 @@ class Producto extends Model
     public function categoria()
     {
         return $this->belongsTo(Categoria::class);
+    }
+
+    public function conversaciones()
+    {
+        return $this->hasMany(Conversacion::class, 'producto_id');
     }
 
     public function user()

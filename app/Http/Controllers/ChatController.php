@@ -14,7 +14,12 @@ class ChatController extends Controller
 {
     public function mostrar($id)
     {
-        $conversacion = Conversacion::with('mensajes')->findOrFail($id);
+            $conversacion = Conversacion::with([
+                'usuario1',
+                'usuario2',
+                'producto',
+                'mensajes.remitente'
+            ])->findOrFail($id);
 
         // Seguridad: verificar que el usuario pertenezca a la conversación
         if (!in_array(Auth::id(), [$conversacion->user1_id, $conversacion->user2_id])) {

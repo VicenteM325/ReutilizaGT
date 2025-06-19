@@ -21,4 +21,8 @@ class Conversacion extends Model
     public function usuario2() {
         return $this->belongsTo(User::class, 'user2_id');
     }
+
+    public function producto(){
+        return $this->belongsTo(Producto::class, 'producto_id');
+    }
 }

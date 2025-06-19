@@ -61,7 +61,11 @@ Route::get('/dashboard', function () {
         return redirect()->route('publicaciones.index');
         })->name('publico.dashboard');
     Route::resource('/mis-productos', MisProductosController::class)->names('mis-productos');
+    Route::put('/mis-productos/{producto}/entregar', [MisProductosController::class, 'marcarComoEntregado'])->name('mis-productos.entregar');
     });
+
+    Route::middleware(['auth', 'role:publico'])->put('/productos/{producto}/recibir', [ReutilizarController::class, 'confirmarRecepcion'])->name('productos.recibir');
+    //Solicitudes
     Route::middleware(['role:publico'])->prefix('publico')->group(function () {
     Route::get('/solicitudes', [SolicitudesRecibidasController::class, 'index'])->name('publico.solicitudes');
     });
@@ -78,7 +82,7 @@ Route::get('/dashboard', function () {
     Route::put('solicitudes/{id}/aceptar', [SolicitudesRecibidasController::class, 'aceptar'])->name('solicitudes.aceptar');
     Route::put('solicitudes/{id}/rechazar', [SolicitudesRecibidasController::class, 'rechazar'])->name('solicitudes.rechazar');
     });
-
+    /*
     Route::middleware(['auth'])->group(function () {
     Route::get('chat/{producto}', [ChatController::class, 'show'])->name('chat.show');
     Route::post('chat/{producto}', [ChatController::class, 'enviar'])->name('chat.enviar');
@@ -97,3 +101,13 @@ Route::get('/dashboard', function () {
     Route::get('/chat/{id}', [ChatController::class, 'mostrar'])->name('chat.mostrar');
     Route::post('/chat/{id}', [ChatController::class, 'enviar'])->name('chat.enviar');
     });
+    */
+
+    //RUTA para mostrar conversación por ID (chat entre 2 usuarios)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/conversaciones/{id}', [ChatController::class, 'mostrar'])->name('chat.mostrar');
+    Route::post('/conversaciones/{id}/mensaje', [ChatController::class, 'enviar'])->name('chat.enviar');
+});
+
+//RUTA para listar conversaciones del usuario logueado
+Route::middleware(['auth', 'verified'])->get('/chat', [ChatController::class, 'listarConversaciones'])->name('chat.index');

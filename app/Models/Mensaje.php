@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mensaje extends Model
 {
-    protected $fillable = ['producto_id', 'de_id', 'para_id', 'mensaje'];
+    protected $fillable = ['conversacion_id', 'de_id', 'para_id', 'mensaje'];
 
     public function remitente()
     {
@@ -26,4 +26,6 @@ class Mensaje extends Model
     {
     return $this->belongsTo(Conversacion::class);
     }
+
+    
 }

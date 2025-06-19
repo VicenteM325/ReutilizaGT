@@ -2,11 +2,16 @@
 
 @section('content')
 <div class="container">
-    <h3>Chat con {{ Auth::id() === $conversacion->user1_id ? $conversacion->user2->name : $conversacion->user1->name }}</h3>
+   <h3>Chat con {{ Auth::id() === $conversacion->user1_id ? $conversacion->usuario2->name : $conversacion->usuario1->name }}</h3>
 
     <div class="border p-3 mb-3" style="height:300px; overflow-y:auto;">
         @foreach($conversacion->mensajes as $mensaje)
-            <p><strong>{{ $mensaje->de_id == Auth::id() ? 'Yo' : 'Ello' }}:</strong> {{ $mensaje->mensaje }}</p>
+            <p>
+              <strong>
+                 {{ $mensaje->de_id == Auth::id() ? 'Yo' : $mensaje->remitente->name }}:
+             </strong>
+                 {{ $mensaje->mensaje }}
+            </p>
         @endforeach
     </div>
 

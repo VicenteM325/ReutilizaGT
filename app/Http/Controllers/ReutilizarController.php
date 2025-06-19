@@ -6,7 +6,7 @@ use App\Models\Producto;
 use App\Models\SolicitudReutilizacion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\NuevaSolicitudReutilizacion;
+use App\Notifications\SolicitudReutilizacion as SolicitudReutilizacionNotification;
 
 class ReutilizarController extends Controller
 {
@@ -31,8 +31,9 @@ class ReutilizarController extends Controller
             ]);
         
             // Notificar al dueño
-            $producto->user->notify(new NuevaSolicitudReutilizacion(Auth::user(), $producto));
+            $producto->user->notify(new SolicitudReutilizacionNotification(Auth::user(), $producto));
         
             return back()->with('success', 'Solicitud enviada al dueño del producto.');
         }
+
 }

@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class MisProductosController extends Controller
 {
@@ -28,6 +29,7 @@ class MisProductosController extends Controller
         $request->validate([
             'titulo' => 'required|string|max:255',
             'descripcion' => 'required',
+            'ubicacion' => 'required|string|max:255',
             'imagen' => 'nullable|image|max:2048',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
@@ -41,6 +43,7 @@ class MisProductosController extends Controller
             'user_id' => Auth::id(),
             'titulo' => $request->titulo,
             'descripcion' => $request->descripcion,
+            'ubicacion' => $request->ubicacion,
             'imagen' => $ruta,
             'categoria_id' => $request->categoria_id,
             'estado' => 'pendiente',
@@ -58,6 +61,9 @@ class MisProductosController extends Controller
     public function edit(Producto $mis_producto)
     {
         abort_unless($mis_producto->user_id === Auth::id(), 403);
+        if ($mis_producto->entregado) {
+            return redirect()->route('mis-productos.index')->with('error', 'No se puede editar un producto que ya fue entregado.');
+        }
         $categorias = Categoria::all();
         return view('publico.productos.edit', compact('mis_producto', 'categorias'));
     }
@@ -65,6 +71,10 @@ class MisProductosController extends Controller
     public function update(Request $request, Producto $mis_producto)
     {
         abort_unless($mis_producto->user_id === Auth::id(), 403);
+
+        if ($mis_producto->entregado) {
+            return redirect()->route('mis-productos.index')->with('error', 'No se puede actualizar un producto entregado.');
+        }
 
         $request->validate([
             'titulo' => 'required|string|max:255',
@@ -92,10 +102,34 @@ class MisProductosController extends Controller
     public function destroy(Producto $mis_producto)
     {
         abort_unless($mis_producto->user_id === Auth::id(), 403);
-        if ($mis_producto->imagen) {
-            Storage::disk('public')->delete($mis_producto->imagen);
-        }
-        $mis_producto->delete();
-        return redirect()->route('mis-productos.index')->with('success', 'Producto eliminado.');
+
+        DB::transaction(function () use ($mis_producto) {
+            // Eliminar imagen si existe
+            if ($mis_producto->imagen) {
+                Storage::disk('public')->delete($mis_producto->imagen);
+            }
+
+            // Eliminar conversaciones relacionadas al producto
+            $mis_producto->conversaciones()->delete();
+
+            // Eliminar el producto
+            $mis_producto->delete();
+        });
+
+            return redirect()->route('mis-productos.index')->with('success', 'Producto eliminado.');
     }
+
+    public function marcarComoEntregado(Producto $producto)
+    {
+        // Verificamos que el producto sea del usuario autenticado
+        if ($producto->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $producto->entregado = true;
+        $producto->save();
+
+        return redirect()->route('mis-productos.index')->with('success', 'Producto marcado como entregado.');
+    }
+
 }

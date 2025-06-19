@@ -15,7 +15,7 @@
             <a href="{{ route('chat.mostrar', $conv->id) }}" class="list-group-item list-group-item-action">
                 Conversación con {{ $otroUsuario->name }} <br>
                 <small class="text-muted">
-                    Producto: {{ $conv->producto->nombre ?? 'N/A' }}
+                    Producto: {{ $conv->producto->titulo ?? 'N/A' }}
                 </small>
             </a>
         @empty

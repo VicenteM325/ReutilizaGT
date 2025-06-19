@@ -7,6 +7,10 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
 
     <div class="mb-3 text-end">
         <a href="{{ route('mis-productos.create') }}" class="btn btn-primary">
@@ -51,12 +55,23 @@
                             <td>{{ $producto->vistas }}</td>
                             <td>
                                 <a href="{{ route('mis-productos.show', $producto) }}" class="btn btn-sm btn-info">Ver</a>
-                                <a href="{{ route('mis-productos.edit', $producto) }}" class="btn btn-sm btn-warning">Editar</a>
-                                <form action="{{ route('mis-productos.destroy', $producto) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Eliminar esta publicación?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">Eliminar</button>
-                                </form>
+                                @if(!$producto->entregado)
+                                    <a href="{{ route('mis-productos.edit', $producto) }}" class="btn btn-sm btn-warning">Editar</a>
+
+                                    <form action="{{ route('mis-productos.destroy', $producto) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Eliminar esta publicación?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger">Eliminar</button>
+                                    </form>
+
+                                    <form action="{{ route('mis-productos.entregar', $producto) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Marcar como entregado?')">
+                                        @csrf
+                                        @method('PUT')
+                                        <button class="btn btn-sm btn-secondary">Entregado</button>
+                                    </form>
+                                @else
+                                    <span class="badge bg-secondary">Entregado</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

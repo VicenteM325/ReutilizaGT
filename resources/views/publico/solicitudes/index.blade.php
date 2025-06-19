@@ -54,13 +54,13 @@
                                         <span class="text-muted">Ya respondida</span>
                                     @endif
                                     @if(session('success'))
-    <div class="alert alert-success d-flex justify-content-between align-items-center">
-        <span>{{ session('success') }}</span>
-        @if(session('chat_route'))
-            <a href="{{ session('chat_route') }}" class="btn btn-primary btn-sm">Ir al chat</a>
-        @endif
-    </div>
-@endif
+                                    <div class="alert alert-success d-flex justify-content-between align-items-center">
+                                        <span>{{ session('success') }}</span>
+                                        @if(session('chat_route'))
+                                            <a href="{{ session('chat_route') }}" class="btn btn-primary btn-sm">Ir al chat</a>
+                                        @endif
+                                    </div>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

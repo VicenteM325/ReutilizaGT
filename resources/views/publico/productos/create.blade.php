@@ -39,6 +39,11 @@
                 @endforeach
             </select>
         </div>
+        
+        <div class="mb-3">
+            <label for="ubicacion" class="form-label">Ubicación</label>
+            <input type="text" name="ubicacion" class="form-control" value="{{ old('ubicacion') }}" required>
+        </div>
 
         <div class="mb-3">
             <label for="imagen" class="form-label">Imagen del Producto (opcional)</label>

@@ -15,6 +15,7 @@
 
             <p><strong>Categoría:</strong> {{ $producto->categoria->nombre }}</p>
             <p><strong>Descripción:</strong> {{ $producto->descripcion }}</p>
+            <p><strong>Ubicación:</strong> {{ $producto->ubicacion}}</p>
             <p><strong>Publicado por:</strong> {{ $producto->user->name }}</p>
 
             @auth
@@ -27,4 +28,21 @@
             @endauth
         </div>
     </div>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    
+    @if (session('info'))
+        <div class="alert alert-info">
+            {{ session('info') }}
+        </div>
+    @endif
+    
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 @stop

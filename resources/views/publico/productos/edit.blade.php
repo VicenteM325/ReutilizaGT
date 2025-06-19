@@ -30,6 +30,11 @@
         </div>
 
         <div class="mb-3">
+            <label for="descripcion" class="form-label">Ubicación</label>
+            <textarea name="descripcion" class="form-control" rows="4" required>{{ old('ubicacion', $mis_producto->ubicacion) }}</textarea>
+        </div>
+
+        <div class="mb-3">
             <label for="categoria_id" class="form-label">Categoría</label>
             <select name="categoria_id" class="form-select" required>
                 <option value="">Seleccione una categoría</option>

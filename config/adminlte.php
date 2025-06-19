@@ -335,6 +335,14 @@ return [
         'icon' => 'fas fa-box',
         'can'  => 'publico',
     ],
+
+    [
+        'text' => 'Mi Chat',
+        'url'  => 'chat',
+        'icon' => 'fas fa-box',
+        'can'  => 'publico',
+    ],
+
 ],
 
    /* 'menu' => [

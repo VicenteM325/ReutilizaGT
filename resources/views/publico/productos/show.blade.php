@@ -20,6 +20,9 @@
             <p><strong>Descripción:</strong></p>
             <p>{{ $mis_producto->descripcion }}</p>
 
+            <p><strong>Ubicación:</strong></p>
+            <p>{{ $mis_producto->ubicacion }}</p>
+
             <p><strong>Estado:</strong>
                 @if($mis_producto->estado === 'pendiente')
                     <span class="badge bg-warning text-dark">Pendiente</span>
