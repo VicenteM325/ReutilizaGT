@@ -64,7 +64,7 @@ return [
     */
 
     'logo' => '<b>Reutiliza</b>GT',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo_img' => 'vendor/adminlte/dist/img/ReutilizaLOGO.webp',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/ReutilizaLOGO.webp',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -330,9 +330,17 @@ return [
         'icon' => 'fas fa-users',
         'can'  => 'admin',
     ],
+
+    [
+    'text' => 'Notificaciones',
+    'url'  => 'usuario/notificaciones',
+    'icon' => 'fas fa-bell',
+    'can'  => 'publico', 
+    ],
+    
     [
         'text' => 'Revisar Productos',
-        'url'  => 'moderador/revisar-productos',
+        'url'  => 'moderacion/productos',
         'icon' => 'fas fa-check-circle',
         'can'  => 'moderador',
     ],
@@ -351,6 +359,19 @@ return [
         'can'  => 'publico',
     ],
 
+    [
+    'text' => 'Reportes',
+    'url'  => 'admin/reportes',
+    'icon' => 'fas fa-chart-pie',
+    'can'  => 'admin', 
+    ],
+
+    [
+    'text' => 'Reportes',
+    'url'  => 'admin/reportes',
+    'icon' => 'fas fa-chart-pie',
+    'can'  => 'moderador', 
+    ],
 ],
 
    /* 'menu' => [

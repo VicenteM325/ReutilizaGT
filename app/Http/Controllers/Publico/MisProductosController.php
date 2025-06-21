@@ -64,6 +64,10 @@ class MisProductosController extends Controller
         if ($mis_producto->entregado) {
             return redirect()->route('mis-productos.index')->with('error', 'No se puede editar un producto que ya fue entregado.');
         }
+
+        if ($mis_producto->estado=='rechazado') {
+            return redirect()->route('mis-productos.index')->with('error', 'No se puede editar un producto que fue rechazado.');
+        }
         $categorias = Categoria::all();
         return view('publico.productos.edit', compact('mis_producto', 'categorias'));
     }

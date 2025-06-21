@@ -79,13 +79,13 @@
                                                class="btn btn-sm btn-info">
                                                 Ver
                                             </a>
-                                            
-                                            @if(!$producto->entregado)
+
+                                            @if (!$producto->entregado && $producto->estado === 'aprobado')
                                                 <a href="{{ route('mis-productos.edit', $producto) }}" 
                                                    class="btn btn-sm btn-warning">
                                                     Editar
                                                 </a>
-                                                
+
                                                 <form action="{{ route('mis-productos.destroy', $producto) }}" 
                                                       method="POST" 
                                                       class="d-inline"
@@ -96,7 +96,7 @@
                                                         Eliminar
                                                     </button>
                                                 </form>
-                                                
+
                                                 <form action="{{ route('mis-productos.entregar', $producto) }}" 
                                                       method="POST" 
                                                       class="d-inline"
@@ -107,10 +107,52 @@
                                                         Marcar como Entregado
                                                     </button>
                                                 </form>
-                                             @else
+
+                                            @elseif ($producto->entregado && !$producto->finalizado)
+                                                {{-- Producto entregado pero pendiente de confirmación --}}
+                                                <span class="badge badge-warning align-self-center">
+                                                    Pendiente de confirmación
+                                                </span>
+
+                                                <form action="{{ route('mis-productos.destroy', $producto) }}" 
+                                                      method="POST" 
+                                                      class="d-inline"
+                                                      onsubmit="return confirm('¿Eliminar esta publicación?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+
+                                            @elseif ($producto->finalizado)
+                                                {{-- Producto entregado y confirmado --}}
+                                                <form action="{{ route('mis-productos.destroy', $producto) }}" 
+                                                      method="POST" 
+                                                      class="d-inline"
+                                                      onsubmit="return confirm('¿Eliminar esta publicación?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+
                                                 <span class="d-inline-flex align-items-center text-muted small">
                                                     <i class="fas fa-check-circle text-success mr-1"></i> Finalizado
                                                 </span>
+                                            @else
+                                                {{-- Otros casos, solo permitir eliminar --}}
+                                                <form action="{{ route('mis-productos.destroy', $producto) }}" 
+                                                      method="POST" 
+                                                      class="d-inline"
+                                                      onsubmit="return confirm('¿Eliminar esta publicación?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
                                             @endif
                                         </div>
                                     </td>
@@ -167,7 +209,7 @@
         // Cerrar automáticamente las alertas después de 5 segundos
         setTimeout(function() {
             $('.alert').alert('close');
-        }, 5000);
+        }, 7000);
     });
 </script>
 @endsection

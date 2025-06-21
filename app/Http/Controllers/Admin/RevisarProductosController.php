@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Producto;
+use App\Notifications\ProductoRechazado;
 
 class RevisarProductosController extends Controller
 {
@@ -29,9 +30,16 @@ class RevisarProductosController extends Controller
         return back()->with('success', 'Producto aprobado');
     }
 
-    public function rechazar(Producto $producto)
+    public function rechazar(Request $request, Producto $producto)
     {
+        $request->validate([
+        'motivo' => 'required|string|max:500',
+        ]);
+
+        $motivo = $request->motivo;
         $producto->update(['estado' => 'rechazado']);
-        return back()->with('error', 'Producto rechazado');
+        $producto->user->notify(new ProductoRechazado($producto, $motivo));
+        
+        return back()->with('error', 'Producto rechazado y notificado al dueño');
     }
 }

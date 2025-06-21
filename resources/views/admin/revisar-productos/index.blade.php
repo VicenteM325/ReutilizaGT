@@ -40,9 +40,12 @@
                             @csrf @method('PUT')
                             <button class="btn btn-success btn-sm">Aprobar</button>
                         </form>
-                        <form action="{{ route('moderacion.productos.rechazar', $producto) }}" method="POST" style="display:inline;">
-                            @csrf @method('PUT')
-                            <button class="btn btn-danger btn-sm">Rechazar</button>
+                        <form action="{{ route('moderacion.productos.rechazar', $producto) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+
+                            <textarea name="motivo" placeholder="Motivo del rechazo" required class="form-control mb-2"></textarea>
+                            <button type="submit" class="btn btn-danger btn-sm">Rechazar</button>
                         </form>
                     @elseif($producto->estado === 'aprobado')
                         <span class="badge bg-success">Aprobado</span>

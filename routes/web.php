@@ -5,13 +5,16 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Publico\MisProductosController;
 use App\Http\Controllers\Admin\UsuariosController;
 use App\Http\Controllers\Admin\RevisarProductosController;
+use App\Http\Controllers\Admin\ReporteController;
 use App\Http\Controllers\PublicacionesController;
 use App\Http\Controllers\ReutilizarController;
+use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\Publico\SolicitudesRecibidasController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Publico\MisSolicitudesController;
 use App\Http\Controllers\Moderador\ModeradorDashboardController;
 use App\Http\Controllers\Admin\CategoriasController;
+
 
 
 Route::get('/', function () {
@@ -56,7 +59,7 @@ Route::get('/dashboard', function () {
     Route::middleware(['role:admin|moderador'])->prefix('moderacion')->name('moderacion.')->group(function () {
     Route::get('productos', [RevisarProductosController::class, 'index'])->name('productos.index');
     Route::put('productos/{producto}/aprobar', [RevisarProductosController::class, 'aprobar'])->name('productos.aprobar');
-    Route::put('productos/{producto}/rechazar', [RevisarProductosController::class, 'rechazar'])->name('productos.rechazar');
+    Route::patch('productos/{producto}/rechazar', [RevisarProductosController::class, 'rechazar'])->name('productos.rechazar');
     });
 
     //Dashboard Moderador
@@ -105,3 +108,18 @@ Route::get('/dashboard', function () {
 
     //RUTA para listar conversaciones del usuario logueado
     Route::middleware(['auth', 'verified'])->get('/chat', [ChatController::class, 'listarConversaciones'])->name('chat.index');
+
+    //Notificaciones
+    Route::middleware(['auth', 'role:publico'])->group(function () {
+    Route::get('usuario/notificaciones', [NotificacionController::class, 'index'])
+        ->name('usuario.notificaciones');
+
+    Route::post('usuario/notificaciones/leidas', [NotificacionController::class, 'marcarTodasLeidas'])
+    ->name('usuario.notificaciones.leer-todas');
+    });
+
+    //Reportes
+    Route::middleware(['auth', 'role:admin|moderador'])->prefix('admin/reportes')->group(function () {
+    Route::get('/', [ReporteController::class, 'index'])->name('admin.reportes.index');
+    Route::post('/filtrar', [ReporteController::class, 'filtrar'])->name('admin.reportes.filtrar');
+    });
